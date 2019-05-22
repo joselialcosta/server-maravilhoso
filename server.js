@@ -29,19 +29,6 @@ app.get('/', (req, res) => {
   res.send(help)
 })
 
-app.use((req, res, next) => {
-  const token = req.get('Authorization')
-
-  if (token) {
-    req.token = token
-    next()
-  } else {
-    res.status(403).send({
-      error: 'Please provide an Authorization header to identify yourself (can be whatever you want)'
-    })
-  }
-})
-
 app.get('/maravilhosas', (req, res) => {
   res.send(maravilhosas.get(req.token))
 })
@@ -51,15 +38,8 @@ app.delete('/maravilhosas/:id', (req, res) => {
 })
 
 app.post('/maravilhosas', bodyParser.json(), (req, res) => {
-  const { name, handle } = req.body
-
-  if (name && handle) {
     res.send(maravilhosas.add(req.token, req.body))
-  } else {
-    res.status(403).send({
-      error: 'Please provide both a name and a handle'
-    })
-  }
+
 })
 
 app.listen(config.port, () => {
