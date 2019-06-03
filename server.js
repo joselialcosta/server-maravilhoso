@@ -2,17 +2,16 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const config = require('./config')
-const maravilhosas = require('./maravilhosas')
+const controller = require('./maravilhosasController')
 
 const app = express()
 
-app.use(express.static('public'))
 app.use(cors())
 
 app.get('/', (req, res) => {
   const help = `
   <pre>
-    Welcome to the Women API!
+    Welcome to the Wonderful Women API!
 
     Use an Authorization header to work with your own data:
 
@@ -22,7 +21,7 @@ app.get('/', (req, res) => {
 
     GET /maravilhosas
     DELETE /maravilhosas/:id
-    POST /maravilhosas { title, handle, avatarURL }
+    POST /maravilhosas { title, bio, avatarURL }
   </pre>
   `
 
@@ -30,15 +29,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/maravilhosas', (req, res) => {
-  res.send(maravilhosas.get(req.token))
+  res.send(controller.getAll())
 })
 
 app.delete('/maravilhosas/:id', (req, res) => {
-  res.send(maravilhosas.remove(req.token, req.params.id))
+  res.send(controller.remove(req.params.id))
 })
 
 app.post('/maravilhosas', bodyParser.json(), (req, res) => {
-    res.send(maravilhosas.add(req.token, req.body))
+    res.send(controller.add(req.body))
 
 })
 
